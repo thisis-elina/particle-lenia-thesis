@@ -6,10 +6,23 @@ These simulations explore **multi-particle interactions**, using **NumPy** and *
 
 ---
 
+# Project Overview
+
+This repository contains simulations of different particle systems with various dynamics and behaviors. Each script demonstrates how particles interact based on different forces and energy fields. The simulations are visualized using `pygame` and allow for interactive exploration of particle dynamics.
+
 ## 📌 Features
-- **`multi_particle_simulation.py`** – Simulates interactions between two different particle types with unique behaviors.
-- **`particle_lenia.py`** – A direct implementation of the **Particle Lenia** model in Python.
-- **`two_glider_thing.py`** – Simulates two interacting glider-like structures based on dynamic fields.
+
+### **`particle_lenia.py`**
+This Python implementation of the **Particle Lenia** model simulates life-like particles in a continuous 2D environment. The particles exhibit autonomous behavior by interacting with each other based on dynamic rules for attraction and repulsion. This model is a direct adaptation of the **Particle Lenia** concept originally written in JavaScript on ObservableHQ (https://observablehq.com/@znah/particle-lenia-from-scratch). 
+
+### **`multi_particle_simulation.py`**
+Simulates the interactions of multiple particle types, each with different behaviors and dynamic field interactions. Particles exhibit unique forces that affect their motion and positioning over time.
+
+### **`two_glider_thing.py`**
+Models two interacting glider-like structures within a particle system, where the particles move according to repulsive forces and potential energy fields. The simulation showcases the behavior of two groups of particles in real-time.
+
+### **`food_hunt_cell.py`**
+Simulates a simple cell that moves in a 2D environment to hunt for food. The cell is attracted to food sources and repels when too close. The particles move based on attractive and repulsive forces, and the simulation continuously updates the cell's position to explore the environment. Food is spawned randomly, and once the cell reaches it, new food appears.
 
 ---
 
