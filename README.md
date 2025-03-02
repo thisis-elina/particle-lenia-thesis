@@ -81,3 +81,5 @@ Will add screenshots later :>
 ## 📜 License
 
 This project is licensed under the MIT License.
+
+---
