@@ -10,7 +10,7 @@ params = {
     "dt": 0.1  # Time step: how much time is passed each step in the simulation
 }
 
-# Food Parameters (easily adjustable)
+# Food Parameters
 food_params = {
     "food_attraction_strength": 0.1,  # Controls how fast particles are attracted to the food
     "food_radius": 2.0,  # Radius around the food where repulsion will occur
