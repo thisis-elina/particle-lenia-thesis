@@ -1,7 +1,7 @@
 ﻿import os
 import csv
 import numpy as np
-from simulations.particle_lenia import ParticleLeniaSimulation
+from simulations.particle_lenia_headless import ParticleLeniaSimulation
 from simulations.food_hunt_cell_headless import FoodHuntSimulation
 from utils.metrics import stability_score, diversity_score, goal_completion
 
