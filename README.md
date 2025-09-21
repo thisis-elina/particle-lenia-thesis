@@ -8,26 +8,20 @@ These simulations explore **multi-particle interactions**, using **NumPy** and *
 
 # Project Overview
 
-This repository contains simulations of different particle systems with various dynamics and behaviors. Each script demonstrates how particles interact based on different forces and energy fields. The simulations are visualized using `pygame` and allow for interactive exploration of particle dynamics.
+This repository contains Python-based simulations inspired by **Particle Lenia**, an artificial life model originally created by @znah on ObservableHQ. The simulations explore multi-particle interactions and cell-like agents in 2D environments, with a focus on energy dynamics, stability, diversity, and goal-directed behaviors.
 
 ## 📂 Project Structure
 ```sh
 particle-lenia-thesis/
-│
 ├── simulations/
-│   └── particle_lenia.py         # Core Particle Lenia simulation
-│
+│ ├── particle_lenia.py # Particle Lenia simulation (continuous particle interactions)
+│ ├── food_hunt_cell.py # Cell simulation that hunts food
+│ ├── food_hunt_cell_headless.py # Headless version for experiments
 ├── utils/
-│   └── metrics.py               # Stability, diversity, goal completion
-│
-├── experiments/
-│   └── experiment_runner.py     # Runs headless experiments and logs metrics
-│
-├── results/                     # Stores experiment CSV outputs
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
+│ └── metrics.py # Functions to compute stability, diversity, goal completion
+├── ExperimentRunner.py # Run experiments with multiple configurations
+├── results/ # CSV results of headless experiments
+└── README.md
 ```
 
 ---
@@ -101,17 +95,79 @@ Run the main simulation with Pygame:
 python simulations/particle_lenia.py
 ```
 
-### Headless Experiments & Metrics
-- Run the main simulation with Pygame:
-
+## 🚀 Running Experiments (Headless)
+- We provide an **ExperimentRunner** to run multiple simulations without visualization and log metrics for analysis.
+- 
 ```sh
 python experiments/experiment_runner.py
 ```
-- Results are saved in results/experiment_results.csv.
-- Use this for thesis experiments and metric analysis.
-- 
+- This will generate:
+```sh
+results/experiment_results.csv
+```
+with following columns:
+```sh
+| simulation    | config\_index | avg\_energy | stability | diversity | goal\_completion |
+| ------------- | ------------- | ----------- | --------- | --------- | ---------------- |
+| ParticleLenia | 0             | -0.0821     | 0.965     | 1.23      | NaN              |
+| ParticleLenia | 1             | 0.0223      | 0.872     | 1.45      | NaN              |
+| FoodHunt      | 0             | -0.0501     | 0.912     | 1.12      | 0.87             |
+| FoodHunt      | 1             | 0.0102      | 0.893     | 1.18      | 0.91             |
+```
+- Metrics explained:
+
+**avg_energy:** Mean system energy over the simulation.
+
+**stability:** Measures how stable particle positions are over time (lower movement = higher stability).
+
+**diversity:** Spatial spread of particles.
+
+**goal_completion:** Fraction of particles that reach the target (only for FoodHunt).
 ---
 
+## 🛠️ Adding New Configurations
+
+- You can extend experiments by modifying experiment_sets in ExperimentRunner.py:
+```sh
+experiment_sets = [
+    {
+        "name": "ParticleLenia",
+        "sim_class": ParticleLeniaSimulation,
+        "configs": [
+            {"mu_k": 4.0, "sigma_k": 1.0, "w_k": 0.022, "c_rep": 1.0,
+             "mu_g":0.6, "sigma_g":0.15, "dt":0.1, "point_n":200},
+            # Add more parameter sets here
+        ]
+    },
+    {
+        "name": "FoodHunt",
+        "sim_class": FoodHuntSimulation,
+        "configs": [
+            {"mu_k": 3.5, "sigma_k":0.8, "w_k":0.03, "c_rep":1.2,
+             "mu_g":0.6, "sigma_g":0.15, "dt":0.1, "point_n":100,
+             "food_params":{"food_attraction_strength":0.1,
+                            "food_radius":2.0,
+                            "food_spawn_min_dist":5.0}},
+        ]
+    }
+]
+
+```
+- Simply add new parameter sets to run experiments in batch mode.
+  
+---
+
+## 🔬 My Analysis & Thesis Use
+
+- Run ExperimentRunner.py for multiple configurations.
+
+- Collect CSV metrics (avg_energy, stability, diversity, goal_completion) for each experiment.
+
+- Use the data for plots, tables, and analysis in the thesis.
+
+- Optionally, run individual scripts with Pygame to visualize particle dynamics.
+
+---
 ## 🖼️ Preview
 
 Will add screenshots later :>
