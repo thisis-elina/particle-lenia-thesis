@@ -10,6 +10,8 @@ These simulations explore **multi-particle interactions**, using **NumPy** and *
 
 This repository contains simulations of different particle systems with various dynamics and behaviors. Each script demonstrates how particles interact based on different forces and energy fields. The simulations are visualized using `pygame` and allow for interactive exploration of particle dynamics.
 
+## 📂 Project Structure
+```sh
 particle-lenia-thesis/
 │
 ├── simulations/
@@ -26,6 +28,7 @@ particle-lenia-thesis/
 ├── README.md
 ├── requirements.txt
 └── .gitignore
+```
 
 ---
 
