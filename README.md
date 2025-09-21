@@ -123,6 +123,7 @@ with following columns:
 **diversity:** Spatial spread of particles.
 
 **goal_completion:** Fraction of particles that reach the target (only for FoodHunt).
+
 ---
 
 ## 🛠️ Adding New Configurations
