@@ -2,7 +2,7 @@
 
 This repository contains Python-based simulations inspired by **Particle Lenia**, an artificial life model originally created by **@znah** on **ObservableHQ** ([source](https://observablehq.com/@znah/particle-lenia-from-scratch)).  
 
-These simulations explore **multi-particle interactions**, using **NumPy** and **Pygame** for real-time visualization.
+These simulations explore **multi-particle interactions**, using **NumPy** and **Pygame** for real-time visualization. This project also supports headless runs for metric logging and parameter exploration.
 
 ---
 
@@ -10,20 +10,47 @@ These simulations explore **multi-particle interactions**, using **NumPy** and *
 
 This repository contains simulations of different particle systems with various dynamics and behaviors. Each script demonstrates how particles interact based on different forces and energy fields. The simulations are visualized using `pygame` and allow for interactive exploration of particle dynamics.
 
-## 📌 Features
+particle-lenia-thesis/
+│
+├── simulations/
+│   └── particle_lenia.py         # Core Particle Lenia simulation
+│
+├── utils/
+│   └── metrics.py               # Stability, diversity, goal completion
+│
+├── experiments/
+│   └── experiment_runner.py     # Runs headless experiments and logs metrics
+│
+├── results/                     # Stores experiment CSV outputs
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
 
-### **`particle_lenia.py`**
-This Python implementation of the **Particle Lenia** model simulates life-like particles in a continuous 2D environment. The particles exhibit autonomous behavior by interacting with each other based on dynamic rules for attraction and repulsion. This model is a direct adaptation of the **Particle Lenia** concept originally written in JavaScript on ObservableHQ (https://observablehq.com/@znah/particle-lenia-from-scratch). 
+---
 
-### **`multi_particle_simulation.py`**
-Simulates the interactions of multiple particle types, each with different behaviors and dynamic field interactions. Particles exhibit unique forces that affect their motion and positioning over time.
+## 🔬 Features
 
-### **`two_glider_thing.py`**
-Models two interacting glider-like structures within a particle system, where the particles move according to repulsive forces and potential energy fields. The simulation showcases the behavior of two groups of particles in real-time.
+### **Simulations**
+- **ParticleLeniaSimulation** (`simulations/particle_lenia.py`)  
+  Core simulation of autonomous particles interacting via **attraction** and **repulsion**. Supports:
+  - Interactive visualization via Pygame.
+  - Headless runs for logging energy and metrics.
 
-### **`food_hunt_cell.py`**
-Simulates a simple cell that moves in a 2D environment to hunt for food. The cell is attracted to food sources and repels when too close. The particles move based on attractive and repulsive forces, and the simulation continuously updates the cell's position to explore the environment. Food is spawned randomly, and once the cell reaches it, new food appears.
+### **Metrics** (`utils/metrics.py`)
+- **Stability score:** Measures how stable the particle configuration is over time.  
+- **Diversity score:** Measures the spatial spread of particles.  
+- **Goal completion:** Fraction of particles near a predefined goal.  
 
+### **Experiments** (`experiments/experiment_runner.py`)
+- Run multiple parameter configurations without Pygame.
+- Automatically logs metrics and average energy to CSV.
+- Example output:
+```sh
+config_index,avg_energy,stability,diversity,goal_completion
+0,-0.08210806,0.954,1.234,0.120
+1,0.02232304,0.872,0.987,0.050
+```
 ---
 
 ## 🔬 Acknowledgment
@@ -63,13 +90,23 @@ python pip install -r requirements.txt
 ---
 
 ## 🎮 Running the Simulations
-Each script uses **Pygame** for visualization. Run any script using:
+
+### Interactive Visualization
+Run the main simulation with Pygame:
 
 ```sh
-python multi_particle_simulation.py
+python simulations/particle_lenia.py
 ```
-Replace with any script name.
 
+### Headless Experiments & Metrics
+- Run the main simulation with Pygame:
+
+```sh
+python experiments/experiment_runner.py
+```
+- Results are saved in results/experiment_results.csv.
+- Use this for thesis experiments and metric analysis.
+- 
 ---
 
 ## 🖼️ Preview
