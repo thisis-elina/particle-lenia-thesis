@@ -1,2 +1,0 @@
-simulation,seed,steps,config,avg_energy,stability,diversity,goal_completion,elapsed_sec
-particle-lenia,123,5,"{""mu_k"": 3.1047271977018887, ""sigma_k"": 0.6697493420181058, ""w_k"": 0.02221725291011195, ""c_rep"": 0.8753901644569073, ""mu_g"": 0.7604795511806779, ""sigma_g"": 0.10572304991534837, ""dt"": 0.1036202040033927, ""point_n"": 150}",0.5501622,0.14639847,150.1201058336944,nan,0.19527053833007812

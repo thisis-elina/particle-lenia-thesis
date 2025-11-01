@@ -334,3 +334,55 @@ For Food‑Hunt, import `FoodHuntSimulation` and pass the same `config`, `seed`,
 
 ## License
 MIT License.
+
+
+---
+
+## Thesis-ready project layout and artifacts
+
+To keep your thesis runs tidy and reproducible, use these conventions (already supported):
+
+- Figures (plots) directory:
+  - `results/figures/` — save all PNGs here
+  - Example (recommended):
+    ```powershell
+    python experiments\make_thesis_figures.py --plenia results\plenia_sweep.csv --food results\food_no_respawn_p64_steps1800.csv --outdir results\figures
+    ```
+  - You can also call the plotters directly with `--out` set to `results\figures\...png`.
+
+- Artifacts directory (configs, rankings, top‑K, run info):
+  - `results/artifacts/`
+  - Put copies of the exact JSON configs and ranking outputs you cite in the thesis here, plus a `RUN_INFO.txt` with env + commands.
+  - Example workflow:
+    ```powershell
+    # Save exact configurations used
+    Copy-Item configs\fixed_food_eval.json results\artifacts\fixed_food_eval.json
+    Copy-Item configs\sweep_food.json results\artifacts\sweep_food.json
+
+    # Rank Particle‑Lenia and store outputs
+    python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia `
+      --objective composite --lambda 0.6 --out results\artifacts\plenia_ranked.csv `
+      --topk-json results\artifacts\plenia_topk.json
+
+    # Record environment and commands
+    "$(python --version)" | Out-File results\artifacts\RUN_INFO.txt
+    pip freeze | Out-File -Append results\artifacts\RUN_INFO.txt
+    'python experiments\random_search.py ...' | Out-File -Append results\artifacts\RUN_INFO.txt
+    ```
+
+- Suggested structure (summary)
+  - `simulations/` — headless sims + interactive demos (under `simulations/interactive/`)
+  - `experiments/` — CLIs for sweeps, ranking, plotting, replays
+  - `results/` — CSVs from runs (source data)
+    - `results/figures/` — thesis figures (PNGs)
+    - `results/artifacts/` — configs, ranked CSVs, Top‑K JSONs, run logs
+  - `tests/` — quick sanity scripts
+  - `configs/` — fixed and sweep JSONs (canonical + alias keys supported)
+
+- Food‑Hunt evaluation settings (documented):
+  - You can disable goal respawn via `food_params.respawn_on_reach=false` in your fixed config.
+  - If you prefer continuous foraging, keep it `true` (default) and set `food_params.respawn_distance` (default `1.0`).
+
+Tips:
+- Keep commands single‑line in PowerShell (avoid `^`); for multi‑line use backticks (`` ` ``) as the last character.
+- Always run from the repo root so relative paths resolve.

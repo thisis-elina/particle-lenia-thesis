@@ -21,8 +21,15 @@ class FoodHuntSimulation:
         self.food_params = config.get("food_params", {
             "food_attraction_strength": 0.1,
             "food_radius": 2.0,
-            "food_spawn_min_dist": 5.0
+            "food_spawn_min_dist": 5.0,
+            # New optional controls for respawn behavior
+            "respawn_on_reach": True,
+            "respawn_distance": 1.0,
         })
+
+        # Convenience accessors for respawn behavior (with defaults if missing)
+        self.food_respawn_on_reach = bool(self.food_params.get("respawn_on_reach", True))
+        self.food_respawn_distance = float(self.food_params.get("respawn_distance", 1.0))
 
         # Particle positions
         self.points = np.zeros(self.point_n * 2, dtype=np.float32)
@@ -184,8 +191,9 @@ class FoodHuntSimulation:
             # Respawn food if reached
             center_x = np.mean(self.points[::2])
             center_y = np.mean(self.points[1::2])
-            if math.sqrt((self.food_pos[0]-center_x)**2 + (self.food_pos[1]-center_y)**2) < 1.0:
-                self.food_pos = self.spawn_food()
+            if self.food_respawn_on_reach:
+                if math.sqrt((self.food_pos[0]-center_x)**2 + (self.food_pos[1]-center_y)**2) < self.food_respawn_distance:
+                    self.food_pos = self.spawn_food()
         return total_energy / steps
 
     # -----------------------------
