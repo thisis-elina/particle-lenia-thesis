@@ -1,0 +1,5 @@
+{
+  "food_params.attraction_strength": {"uniform": [0.03, 0.12]},
+  "food_params.goal_radius": {"uniform": [1.5, 3.0]},
+  "food_params.spawn_min_distance": {"uniform": [4.0, 8.0]}
+}

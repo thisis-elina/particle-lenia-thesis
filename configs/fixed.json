@@ -1,0 +1,10 @@
+{
+  "kernel_mu": 4.0,
+  "kernel_sigma": 1.0,
+  "kernel_weight": 0.022,
+  "repulsion_coefficient": 1.0,
+  "growth_mu": 0.6,
+  "growth_sigma": 0.15,
+  "time_step": 0.1,
+  "point_count": 100
+}
