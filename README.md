@@ -46,6 +46,15 @@ python -m pip install -r requirements.txt
 ```
 If you run in a true headless Linux CI and SDL complains, set `SDL_VIDEODRIVER=dummy`.
 
+### **Experiments** (`experiments/experiment_runner.py`)
+- Run multiple parameter configurations without Pygame.
+- Automatically logs metrics and average energy to CSV.
+- Example output:
+```sh
+config_index,avg_energy,stability,diversity,goal_completion
+0,-0.08210806,0.954,1.234,0.120
+1,0.02232304,0.872,0.987,0.050
+```
 ---
 
 ## Run interactive simulations (pygame)
@@ -182,6 +191,67 @@ What they check:
 - Determinism: same config + seed → identical results.
 - Metric bounds: diversity ≥ 0, goal completion in [0,1], stability finite.
 
+## 🚀 Running Experiments (Headless)
+- We provide an **ExperimentRunner** to run multiple simulations without visualization and log metrics for analysis.
+- 
+```sh
+python experiments/experiment_runner.py
+```
+- This will generate:
+```sh
+results/experiment_results.csv
+```
+with following columns:
+```sh
+| simulation    | config\_index | avg\_energy | stability | diversity | goal\_completion |
+| ------------- | ------------- | ----------- | --------- | --------- | ---------------- |
+| ParticleLenia | 0             | -0.0821     | 0.965     | 1.23      | NaN              |
+| ParticleLenia | 1             | 0.0223      | 0.872     | 1.45      | NaN              |
+| FoodHunt      | 0             | -0.0501     | 0.912     | 1.12      | 0.87             |
+| FoodHunt      | 1             | 0.0102      | 0.893     | 1.18      | 0.91             |
+```
+- Metrics explained:
+
+**avg_energy:** Mean system energy over the simulation.
+
+**stability:** Measures how stable particle positions are over time (lower movement = higher stability).
+
+**diversity:** Spatial spread of particles.
+
+**goal_completion:** Fraction of particles that reach the target (only for FoodHunt).
+
+---
+
+## 🛠️ Adding New Configurations
+
+- You can extend experiments by modifying experiment_sets in ExperimentRunner.py:
+```sh
+experiment_sets = [
+    {
+        "name": "ParticleLenia",
+        "sim_class": ParticleLeniaSimulation,
+        "configs": [
+            {"mu_k": 4.0, "sigma_k": 1.0, "w_k": 0.022, "c_rep": 1.0,
+             "mu_g":0.6, "sigma_g":0.15, "dt":0.1, "point_n":200},
+            # Add more parameter sets here
+        ]
+    },
+    {
+        "name": "FoodHunt",
+        "sim_class": FoodHuntSimulation,
+        "configs": [
+            {"mu_k": 3.5, "sigma_k":0.8, "w_k":0.03, "c_rep":1.2,
+             "mu_g":0.6, "sigma_g":0.15, "dt":0.1, "point_n":100,
+             "food_params":{"food_attraction_strength":0.1,
+                            "food_radius":2.0,
+                            "food_spawn_min_dist":5.0}},
+        ]
+    }
+]
+
+```
+- Simply add new parameter sets to run experiments in batch mode.
+  
 ---
 
 ## Repeatability: how it works
