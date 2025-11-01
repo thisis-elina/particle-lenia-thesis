@@ -338,50 +338,40 @@ MIT License.
 
 ---
 
-## Thesis-ready project layout and artifacts
+## Visualizations (figures, time‑series, animations)
 
-To keep your thesis runs tidy and reproducible, use these conventions (already supported):
+Figures output directories (created automatically):
+- `results/figures/plenia/` — Particle‑Lenia plots (e.g., `plenia_scatter.png`)
+- `results/figures/food/` — Food‑Hunt plots (e.g., `food_goal_hist.png`)
+- `results/figures/timeseries/` — time‑series plots from replays
+- `results/figures/animations/` — GIF/MP4 animations
 
-- Figures (plots) directory:
-  - `results/figures/` — save all PNGs here
-  - Example (recommended):
-    ```powershell
-    python experiments\make_thesis_figures.py --plenia results\plenia_sweep.csv --food results\food_no_respawn_p64_steps1800.csv --outdir results\figures
-    ```
-  - You can also call the plotters directly with `--out` set to `results\figures\...png`.
+Generate the two main thesis figures (scatter + histogram) in one command:
+```powershell
+python experiments\visualizations\make_figures.py --plenia results\plenia_sweep.csv --food results\food_no_respawn_p64_steps1800.csv
+```
+Outputs:
+- `results/figures/plenia/plenia_scatter.png`
+- `results/figures/food/food_goal_hist.png`
 
-- Artifacts directory (configs, rankings, top‑K, run info):
-  - `results/artifacts/`
-  - Put copies of the exact JSON configs and ranking outputs you cite in the thesis here, plus a `RUN_INFO.txt` with env + commands.
-  - Example workflow:
-    ```powershell
-    # Save exact configurations used
-    Copy-Item configs\fixed_food_eval.json results\artifacts\fixed_food_eval.json
-    Copy-Item configs\sweep_food.json results\artifacts\sweep_food.json
+Time‑series (Food‑Hunt)
+1) Replay a row to produce a per‑step CSV:
+```powershell
+python experiments\replay_food_timeseries.py --from-csv results\food_no_respawn_p64_steps1800.csv --row-index 2 --out results\artifacts\food_row2_timeseries.csv
+```
+2) Plot the time‑series into the figures folder:
+```powershell
+python experiments\plot_food_timeseries.py --in results\artifacts\food_row2_timeseries.csv --out results\figures\timeseries\food_row2_timeseries.png --title "Food-Hunt row 2" --show-dist
+```
 
-    # Rank Particle‑Lenia and store outputs
-    python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia `
-      --objective composite --lambda 0.6 --out results\artifacts\plenia_ranked.csv `
-      --topk-json results\artifacts\plenia_topk.json
-
-    # Record environment and commands
-    "$(python --version)" | Out-File results\artifacts\RUN_INFO.txt
-    pip freeze | Out-File -Append results\artifacts\RUN_INFO.txt
-    'python experiments\random_search.py ...' | Out-File -Append results\artifacts\RUN_INFO.txt
-    ```
-
-- Suggested structure (summary)
-  - `simulations/` — headless sims + interactive demos (under `simulations/interactive/`)
-  - `experiments/` — CLIs for sweeps, ranking, plotting, replays
-  - `results/` — CSVs from runs (source data)
-    - `results/figures/` — thesis figures (PNGs)
-    - `results/artifacts/` — configs, ranked CSVs, Top‑K JSONs, run logs
-  - `tests/` — quick sanity scripts
-  - `configs/` — fixed and sweep JSONs (canonical + alias keys supported)
-
-- Food‑Hunt evaluation settings (documented):
-  - You can disable goal respawn via `food_params.respawn_on_reach=false` in your fixed config.
-  - If you prefer continuous foraging, keep it `true` (default) and set `food_params.respawn_distance` (default `1.0`).
+Animations (moving circles)
+- Food‑Hunt (goal always kept in frame by default):
+```powershell
+python experiments\visualizations\animate_simulation.py --mode food-hunt --from-csv results\food_no_respawn_p64_steps1800.csv --row-index 2 --steps 1200 --frame-stride 4 --fps 20 --out results\figures\animations\food_row2_anim.gif
+```
+Notes:
+- Add `--lock-extent` to keep a fixed camera; optionally pair with `--extent xmin xmax ymin ymax`.
+- Use `.gif` (no extra deps) or `.mp4` (requires ffmpeg installed).
 
 Tips:
 - Keep commands single‑line in PowerShell (avoid `^`); for multi‑line use backticks (`` ` ``) as the last character.
