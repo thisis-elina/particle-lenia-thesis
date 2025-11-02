@@ -7,8 +7,28 @@ This repository contains Python simulations inspired by Particle‑Lenia with bo
 - Baseline experiments: `experiments/experiment_runner.py`
 - Random search CLI (JSON sweeps, multi‑model): `experiments/random_search.py`
 - Result ranking: `experiments/rank_results.py`
+- Plotting/animations: `experiments/visualizations/*`
+- Robustness tools: `experiments/replay_topk.py`, `experiments/plot_pl_robustness.py`
 - Metrics: `utils/metrics.py`
 - Quick tests: `tests/*.py`
+
+---
+
+## Quickstart (reproduce thesis figures fast)
+
+1) Rank Particle‑Lenia with the composite objective (λ = 0.6):
+```powershell
+python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia --objective composite --lambda 0.6 --out results\artifacts\plenia_ranked.csv --topk-json results\artifacts\plenia_topk.json
+```
+2) Generate the two main figures (scatter + histogram) into subfolders:
+```powershell
+python experiments\visualizations\make_figures.py --plenia results\plenia_sweep.csv --food results\food_no_respawn_p64_steps1800.csv
+```
+Optional — robustness (mean±std across seeds) + error‑bar figure:
+```powershell
+python experiments\replay_topk.py --topk results\artifacts\plenia_topk.json --out results\artifacts\plenia_topk_robust.csv --seeds 5 --steps 1500
+python experiments\plot_pl_robustness.py --in results\artifacts\plenia_topk_robust.csv --out results\figures\plenia\plenia_robustness.png --title "PL Robustness (5 seeds, 1500 steps)"
+```
 
 ---
 
