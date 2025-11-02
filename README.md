@@ -134,18 +134,15 @@ Both forms below are accepted. The tool normalizes aliases to canonical keys int
 ### 2) Run sweeps
 - Particle‑Lenia only:
 ```powershell
-python experiments\random_search.py --mode particle-lenia --trials 60 --steps 300 ^
-  --fixed-config fixed.json --sweep sweep.json --out results\plenia_sweep.csv
+python experiments\random_search.py --mode particle-lenia --trials 60 --steps 300 --fixed-config fixed.json --sweep sweep.json --out results\plenia_sweep.csv
 ```
 - Food‑Hunt only:
 ```powershell
-python experiments\random_search.py --mode food-hunt --trials 60 --steps 300 ^
-  --fixed-config fixed.json --sweep sweep.json --out results\food_sweep.csv
+python experiments\random_search.py --mode food-hunt --trials 60 --steps 300 --fixed-config fixed.json --sweep sweep.json --out results\food_sweep.csv
 ```
 - Both models in one go:
 ```powershell
-python experiments\random_search.py --modes particle-lenia,food-hunt --trials 60 --steps 300 ^
-  --fixed-config fixed.json --sweep sweep.json --out results\both_sweep.csv
+python experiments\random_search.py --modes particle-lenia,food-hunt --trials 60 --steps 300 --fixed-config fixed.json --sweep sweep.json --out results\both_sweep.csv
 ```
 Notes:
 - If `--sweep` is omitted, the script samples over built‑in ranges (backward compatible).
@@ -158,19 +155,15 @@ Create a ranked CSV and optional Top‑K JSON for re‑runs.
 
 - Particle‑Lenia composite objective (`J = z(diversity) + λ·z(stability)`, λ=0.6 default):
 ```powershell
-python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia ^
-  --objective composite --lambda 0.6 --out results\plenia_ranked.csv --topk-json results\plenia_topk.json
+python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia --objective composite --lambda 0.6 --out results\plenia_ranked.csv --topk-json results\plenia_topk.json
 ```
 - Constrained objective (require stability ≥ 0.10 and diversity floor):
 ```powershell
-python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia ^
-  --objective constrained --stab-min 0.10 --div-floor 1e-6 --lambda 0.6 ^
-  --out results\plenia_ranked_c.csv --topk-json results\plenia_topk_c.json
+python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia --objective constrained --stab-min 0.10 --div-floor 1e-6 --lambda 0.6 --out results\plenia_ranked_c.csv --topk-json results\plenia_topk_c.json
 ```
 - Food‑Hunt (prioritize goal completion with diversity floor):
 ```powershell
-python experiments\rank_results.py --in results\food_sweep.csv --mode food-hunt ^
-  --objective food-goal --div-floor 1e-6 --out results\food_ranked.csv --topk-json results\food_topk.json
+python experiments\rank_results.py --in results\food_sweep.csv --mode food-hunt --objective food-goal --div-floor 1e-6 --out results\food_ranked.csv --topk-json results\food_topk.json
 ```
 
 Artifacts:
@@ -286,13 +279,11 @@ experiment_sets = [
 ```
 2) Run with an explicit seed and steps
 ```powershell
-python experiments\random_search.py --mode particle-lenia --trials 60 --steps 300 --seed 123 ^
-  --fixed-config fixed.json --sweep sweep.json --out results\plenia_sweep.csv
+python experiments\random_search.py --mode particle-lenia --trials 60 --steps 300 --seed 123 --fixed-config fixed.json --sweep sweep.json --out results\plenia_sweep.csv
 ```
 3) (Optional) Rank by objective
 ```powershell
-python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia ^
-  --objective composite --lambda 0.6 --out results\plenia_ranked.csv --topk-json results\plenia_topk.json
+python experiments\rank_results.py --in results\plenia_sweep.csv --mode particle-lenia --objective composite --lambda 0.6 --out results\plenia_ranked.csv --topk-json results\plenia_topk.json
 ```
 
 ## How to reproduce a specific trial later
