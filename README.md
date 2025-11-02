@@ -376,3 +376,40 @@ Notes:
 Tips:
 - Keep commands single‑line in PowerShell (avoid `^`); for multi‑line use backticks (`` ` ``) as the last character.
 - Always run from the repo root so relative paths resolve.
+
+
+---
+
+## Robustness (Top‑K re‑evaluation) and error‑bar plots
+
+After ranking Particle‑Lenia with the composite objective, you can re‑evaluate Top‑K configs across multiple seeds and longer horizons to report mean±std:
+
+- Balanced pass (5 seeds × 1500 steps):
+```powershell
+python experiments\replay_topk.py --topk results\artifacts\plenia_topk.json --out results\artifacts\plenia_topk_robust.csv --seeds 5 --steps 1500
+```
+- Heavy pass (8 seeds × 2000 steps):
+```powershell
+python experiments\replay_topk.py --topk results\artifacts\plenia_topk.json --out results\artifacts\plenia_topk_robust_s8_s2000.csv --seeds 8 --steps 2000
+```
+- Top‑5 only (optional):
+```powershell
+(Get-Content results\artifacts\plenia_topk.json -Raw | ConvertFrom-Json | Select-Object -First 5 | ConvertTo-Json -Depth 5) | Out-File results\artifacts\plenia_top5.json; python experiments\replay_topk.py --topk results\artifacts\plenia_top5.json --out results\artifacts\plenia_top5_robust.csv --seeds 5 --steps 1500
+```
+
+Generate an error‑bar figure (mean±std) for the Top‑K aggregates:
+```powershell
+python experiments\plot_pl_robustness.py --in results\artifacts\plenia_topk_robust_s8_s2000.csv --out results\figures\plenia\plenia_robustness.png --title "Particle‑Lenia Top‑K Robustness (8 seeds, 2000 steps)"
+```
+
+## Animations 
+
+Export an animation of a single configuration as GIF/MP4. By default, the camera adjusts each frame to keep particles (and the goal in Food‑Hunt) in view.
+
+- Food‑Hunt (from a sweep row):
+```powershell
+python experiments\visualizations\animate_simulation.py --mode food-hunt --from-csv results\food_no_respawn_p64_steps1800.csv --row-index 2 --steps 1200 --frame-stride 4 --fps 20 --out results\figures\animations\food_row2_anim.gif
+```
+- Lock the camera (optional): add `--lock-extent`; you can also pass `--extent xmin xmax ymin ymax`.
+- MP4 (requires ffmpeg): use an `.mp4` output path.
+
